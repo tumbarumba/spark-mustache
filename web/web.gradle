@@ -1,0 +1,40 @@
+apply plugin: 'application'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+mainClassName = 'WebMain'
+
+dependencies {
+    compile libs.guava
+    compile libs.spark
+    compile libs.sparkMustache
+    compile project(':spark-mustache-domain')
+
+    runtime 'ch.qos.logback:logback-classic:1.1.7'
+
+    testCompile libs.assertJ
+    testCompile libs.htmlUnit
+    testCompile libs.junit
+    testCompile libs.mockito
+}
+
+jar {
+    manifest {
+        attributes("Implementation-Title": "Spark Mustache Web",
+                "Implementation-Version": rootProject.version)
+    }
+}
+
+shadowJar {
+    archiveName = "${project.name}-all.jar"
+    mergeServiceFiles()
+}
+
+artifacts {
+    archives shadowJar
+}
+
+buildscript {
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+    }
+}
